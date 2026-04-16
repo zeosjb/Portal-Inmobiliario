@@ -1,0 +1,22 @@
+{
+  "name": "portal_inmobiliario",
+  "version": "1.0.0",
+  "description": "Este es un portal inmboliario.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node",
+    "dev": "nodemon",
+    "migrate": "sequelize db:migrate",
+    "undo": "sequelize db:migrate:undo",
+    "seed": "sequelize db:seed:all"
+  },
+  "keywords": [
+    "portal",
+    "inmboliario",
+    "express",
+    "nodejs",
+    "sqlite"
+  ],
+  "author": "Jose Benitez",
+  "license": "ISC"
+}
