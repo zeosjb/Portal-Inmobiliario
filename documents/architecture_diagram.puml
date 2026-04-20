@@ -1,0 +1,69 @@
+@startuml
+skinparam componentStyle rectangle
+title Arquitectura de Software - Portal Inmobiliario
+
+actor Cliente
+
+node "Backend Node.js + Express" {
+
+  package "Presentation Layer" {
+    [Routes]
+  }
+
+  package "Application Layer" {
+    [User Controller]
+    [Auth Controller]
+    [Verify Role Middleware]
+  }
+
+  package "Domain / Persistence Layer" {
+    [User Model]
+    [Role Model]
+    [Agency Model]
+    [Property Model]
+    [Type Model]
+    [Favorite Model]
+    [Consultation Model]
+  }
+
+  package "Infrastructure Layer" {
+    [App.js]
+    [Server.js]
+    [Database Config]
+    [Sequelize Index]
+    [Migrations]
+    [Seeders]
+  }
+}
+
+database "SQLite Database\nportal.sqlite" as DB
+
+Cliente --> [Routes] : HTTP Requests
+[Routes] --> [User Controller]
+[Routes] --> [Auth Controller]
+[Routes] --> [Verify Role Middleware]
+
+[Verify Role Middleware] --> [User Controller]
+[User Controller] --> [User Model]
+[User Controller] --> [Role Model]
+[Auth Controller] --> [User Model]
+
+[User Model] --> [Sequelize Index]
+[Role Model] --> [Sequelize Index]
+[Agency Model] --> [Sequelize Index]
+[Property Model] --> [Sequelize Index]
+[Type Model] --> [Sequelize Index]
+[Favorite Model] --> [Sequelize Index]
+[Consultation Model] --> [Sequelize Index]
+
+[Sequelize Index] --> [Database Config]
+[Database Config] --> DB
+
+[Migrations] --> DB
+[Seeders] --> DB
+
+[App.js] --> [Routes]
+[Server.js] --> [App.js]
+[Server.js] --> [Database Config]
+
+@enduml

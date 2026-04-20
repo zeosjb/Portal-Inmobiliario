@@ -1,0 +1,134 @@
+@startuml
+hide circle
+skinparam classAttributeIconSize 0
+
+title Portal Inmobiliario - Modelo Actual
+
+' ========================
+' USERS
+' ========================
+class User {
+  id: INT
+  name: STRING
+  lastName: STRING
+  email: STRING
+  rut: STRING
+  password: STRING
+  phone: STRING
+  address: STRING
+  isActive: BOOLEAN
+  accessLevel: INT
+  agentCode: STRING
+  commission: DECIMAL
+  editPermission: BOOLEAN
+  reviewPermission: BOOLEAN
+  roleId: INT
+  agencyId: INT
+}
+
+class Role {
+  id: INT
+  name: ENUM
+}
+
+class Agency {
+  id: INT
+  name: STRING
+  agencyRut: STRING
+  contactEmail: STRING
+  phone: STRING
+  address: STRING
+  city: STRING
+  region: STRING
+  isActive: STRING
+  registrationDate: DATE
+}
+
+' ========================
+' PROPERTIES
+' ========================
+class Property {
+  id: INT
+  title: STRING
+  description: TEXT
+  price_clp: DECIMAL
+  price_uf: DECIMAL
+  adress: STRING
+  images: TEXT
+  neighborhood: STRING
+  county: STRING
+  city: STRING
+  region: STRING
+  areaM2: DECIMAL
+  yearBuilt: INT
+  bathrooms: INT
+  bedrooms: INT
+  furnished: BOOLEAN
+  status: ENUM
+  operationType: ENUM
+  publicationDate: DATE
+  cubicles: INT
+  privateBathrooms: INT
+  hasReception: BOOLEAN
+  meetingRooms: INT
+  floors: INT
+  floor: INT
+  hasGarden: BOOLEAN
+  hasParking: BOOLEAN
+  hasPool: BOOLEAN
+  hasBasement: BOOLEAN
+  hasAttic: BOOLEAN
+  commonExpenses: DECIMAL
+  hasStorage: BOOLEAN
+  parkingQuantity: INT
+  agentId: INT
+  moderatorId: INT
+  typeId: INT
+}
+
+class Type {
+  id: INT
+  name: ENUM
+}
+
+' ========================
+' RELATIONAL TABLES
+' ========================
+class Favorite {
+  id: INT
+  clientId: INT
+  propertyId: INT
+}
+
+class Consultation {
+  id: INT
+  message: TEXT
+  status: ENUM
+  clientId: INT
+  propertyId: INT
+}
+
+' ========================
+' RELACIONES
+' ========================
+
+' Roles
+Role "1" -- "0..*" User : role
+
+' Agencies
+Agency "1" -- "0..*" User : agents
+
+' Properties
+User "1" -- "0..*" Property : publishes (agent)
+User "1" -- "0..*" Property : moderates
+Type "1" -- "0..*" Property : type
+
+' Favoritos (N:M)
+User "1" -- "0..*" Favorite
+Property "1" -- "0..*" Favorite
+
+' Consultas
+User "1" -- "0..*" Consultation : client
+Property "1" -- "0..*" Consultation
+
+@enduml
