@@ -15,9 +15,7 @@ class Server {
 
         // Paths a los cuales se dirigirá la API
         this.paths = {
-            users = '/api/users',
-            properties = '/api/properties',
-            agents = '/api/agents'
+            users = '/api/users'
         }
 
         // Conexión a la base de datos
