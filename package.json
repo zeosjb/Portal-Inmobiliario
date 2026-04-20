@@ -1,8 +1,8 @@
 {
   "name": "portal_inmobiliario",
   "version": "1.0.0",
-  "description": "Este es un portal inmboliario.",
-  "main": "index.js",
+  "description": "Este es un portal inmobliario.",
+  "main": "./src/app.js",
   "scripts": {
     "start": "node",
     "dev": "nodemon",
@@ -28,7 +28,6 @@
     "jsonwebtoken": "^9.0.3",
     "nodemon": "^3.1.14",
     "sequelize": "^6.37.8",
-    "sequelize-cli": "^6.6.5",
     "sqlite3": "^6.0.1"
   },
   "devDependencies": {
