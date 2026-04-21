@@ -5,6 +5,7 @@ require('dotenv').config
 
 // Imports desde las carpetas
 const db = require('./config/database')
+const User = require('./models/user')
 // Modelos que vamos creando
 
 class Server {
@@ -15,7 +16,7 @@ class Server {
 
         // Paths a los cuales se dirigirá la API
         this.paths = {
-            users = '/api/users'
+            users: '/api/users'
         }
 
         // Conexión a la base de datos
@@ -41,7 +42,7 @@ class Server {
             })
         
         // Sincronizacion de los modelos creados
-        // Usuario
+        await User.sync({force:false})
         // Role
         // Propiedades
         console.log('Models synchronized with the database')
