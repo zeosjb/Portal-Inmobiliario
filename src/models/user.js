@@ -1,6 +1,6 @@
-const sequelize = require('../config/database')
-const db = require('../config/database')
-const { DataTypes } = require('sequelize')
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
+const db = require('../config/database');
 
 const User = sequelize.define('User', {
     id: {
@@ -19,7 +19,10 @@ const User = sequelize.define('User', {
     email: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true
+        unique: true,
+        validate: {
+            isEmail: true
+        }
     },
     rut: {
         type: DataTypes.STRING,
@@ -32,9 +35,11 @@ const User = sequelize.define('User', {
     },
     address: {
         type: DataTypes.STRING,
+        allowNull: true
     },
     phone: {
         type: DataTypes.STRING,
+        allowNull: true
     },
     isActive: {
         type: DataTypes.BOOLEAN,
@@ -42,33 +47,60 @@ const User = sequelize.define('User', {
         defaultValue: true
     },
     accessLevel: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
+        allowNull: true
     },
     agentCode: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: true
     },
-    comission: {
-        type: DataTypes.DECIMAL(10, 2)
+    commission: {
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: true
     },
     editPermission: {
         type: DataTypes.BOOLEAN,
-        defaultValue: false,
+        defaultValue: false
     },
     reviewPermission: {
         type: DataTypes.BOOLEAN,
-        defaultValue: false,
+        defaultValue: false
+    },
+    roleId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'roles',
+            key: 'id'
+        }
     }
 }, {
     sequelize: db,
     modelName: 'User',
-    tableName: 'Users',
+    tableName: 'users',
     timestamps: true
-})
+});
+
+User.associate = (models) => {
+    User.belongsTo(models.Role, {
+        foreignKey: 'roleId',
+        as: 'role'
+    });
+
+    User.hasMany(models.Property, {
+        foreignKey: 'agentId',
+        as: 'propertiesPublished'
+    });
+
+    User.hasMany(models.Property, {
+        foreignKey: 'moderatorId',
+        as: 'moderatedProperties'
+    });
+};
 
 User.prototype.toJSON = function() {
-    const {password, ...user} = this.get()
-    delete user.password
-    return user
-}
+    const { password, ...user } = this.get();
+    return user;
+};
 
-module.exports = User
+module.exports = User;
