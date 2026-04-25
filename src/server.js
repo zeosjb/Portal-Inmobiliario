@@ -1,71 +1,72 @@
-const express = require('express')
-const morgan = require('morgan')
-const cors = require('cors')
-require('dotenv').config
+const express = require('express');
+const morgan = require('morgan');
+const cors = require('cors');
+require('dotenv').config();
 
-// Imports desde las carpetas
-const db = require('./config/database')
-const User = require('./models/user')
-// Modelos que vamos creando
+const db = require('./config/database');
+const { User, Role, Type, Property } = require('./models/initModels');
 
 class Server {
     constructor() {
-        this.app = express()
-        this.port = process.env.PORT || 5000
-        this.server = require('http').createServer(this.app)
+        this.app = express();
+        this.port = process.env.PORT || 5000;
+        this.server = require('http').createServer(this.app);
 
-        // Paths a los cuales se dirigirá la API
         this.paths = {
             users: '/api/users'
-        }
+        };
 
-        // Conexión a la base de datos
-        this.connectDB()
-
-        // BodyParser para usar json
-        this.app.use(express.json())
-
-        // Middlewares - Validar el role y validar el token de acceso
-        this.middlewares()
-
-        // Rutas que vamos a ocupar
-        this.routes()
+        this.connectDB();
+        this.middlewares();
+        this.routes();
     }
 
     async connectDB() {
-        await db.authenticate()
-            .then(() => {
-                console.log('The database has connected successfully')
-            })
-            .catch((err) => {
-                console.error('Unable to connect to the database:', err)
-            })
-        
-        // Sincronizacion de los modelos creados
-        await User.sync({force:false})
-        // Role
-        // Propiedades
-        console.log('Models synchronized with the database')
+        try {
+            await db.authenticate();
+            console.log('The database has connected successfully');
+
+            await Role.sync({ force: false });
+            await Type.sync({ force: false });
+            await User.sync({ force: false });
+            await Property.sync({ force: false });
+
+            await this.seedCatalogs();
+
+            console.log('Models synchronized with the database');
+        } catch (error) {
+            console.error('Unable to connect to the database:', error);
+        }
+    }
+
+    async seedCatalogs() {
+        const roles = ['Admin', 'Moderator', 'Client', 'Agent'];
+        const types = ['House', 'Apartment', 'Office', 'Commercial', 'Other'];
+
+        for (const name of roles) {
+            await Role.findOrCreate({ where: { name } });
+        }
+
+        for (const name of types) {
+            await Type.findOrCreate({ where: { name } });
+        }
     }
 
     middlewares() {
-        // Logger - Mostrar informacion en desarrollo
-        this.app.use(morgan('dev'))
-
-        // CORS - Validar el frontend
-        this.app.use(cors())
+        this.app.use(express.json());
+        this.app.use(morgan('dev'));
+        this.app.use(cors());
     }
 
     routes() {
-        this.app.use('/api/users', require('./routes/user.routes'))
+        this.app.use(this.paths.users, require('./routes/user.routes'));
     }
 
     listen() {
         this.app.listen(this.port, () => {
-            console.log(`Server running on port: http://localhost:${this.port}`)
-        })
+            console.log(`Server running on port: http://localhost:${this.port}`);
+        });
     }
-
 }
 
-module.exports = Server
+module.exports = Server;
