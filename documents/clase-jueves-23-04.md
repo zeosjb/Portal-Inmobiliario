@@ -2,7 +2,7 @@
 
 ## Objetivo de la clase
 
-En esta clase continuamos la construccion del backend de `Portal-Inmobiliario` tomando como referencia la estructura y las buenas practicas vistas en `Portal-Example`. El foco de la sesion fue comprender como escalar el proyecto desde un modelo inicial de usuarios hacia una arquitectura mas completa, incorporando:
+En esta clase continuamos la construccion del backend de `Portal-Inmobiliario` tomando como referencia la estructura y las buenas practicas vistas en clases. El foco de la sesion fue comprender como escalar el proyecto desde un modelo inicial de usuarios hacia una arquitectura mas completa, incorporando:
 
 - El modelo `Type`
 - El modelo `Role`
@@ -11,7 +11,7 @@ En esta clase continuamos la construccion del backend de `Portal-Inmobiliario` t
 - Un controlador completo para `users` con operaciones CRUD
 - La creacion de `utils` y `middlewares`
 
-La idea pedagogica de esta clase no es solo "copiar codigo", sino entender por que cada archivo existe, que problema resuelve y como se conecta con el resto del sistema.
+La idea de esta clase no es solo "copiar codigo", sino entender por que cada archivo existe, que problema resuelve y como se conecta con el resto del sistema.
 
 ---
 
@@ -116,7 +116,7 @@ Role.associate = (models) => {
 module.exports = Role;
 ```
 
-### Explicacion docente
+### Explicacion
 
 Observemos dos ideas clave:
 
@@ -168,7 +168,7 @@ Type.associate = (models) => {
 module.exports = Type;
 ```
 
-### Explicacion docente
+### Explicacion
 
 Este modelo resuelve un problema comun: la inconsistencia de datos. Si dejamos que cada usuario escriba libremente el tipo de propiedad, apareceran valores como:
 
@@ -264,7 +264,7 @@ const Property = sequelize.define('Property', {
 });
 ```
 
-### Explicacion docente
+### Explicacion
 
 Este modelo une varias decisiones importantes del sistema:
 
@@ -369,7 +369,7 @@ router.delete('/:id', validateToken, verifyRole('Admin'), deleteUser);
 module.exports = router;
 ```
 
-### Explicacion docente
+### Explicacion
 
 Fijense en lo siguiente:
 
@@ -558,7 +558,7 @@ module.exports = {
 };
 ```
 
-### Explicacion docente
+### Explicacion
 
 Este controlador muestra el patron clasico de un CRUD:
 
@@ -803,7 +803,7 @@ const previousDateVerification = (date) => {
 module.exports = previousDateVerification;
 ```
 
-### Explicacion docente
+### Explicacion
 
 La utilidad de separar estas funciones en `utils` es simple pero muy importante:
 
@@ -842,9 +842,9 @@ Desde el punto de vista de arquitectura, esta decision hace que la API sea mas c
 
 ---
 
-## 13. Recomendaciones de implementacion para el estudiante
+## 13. Recomendaciones de implementacion
 
-Como profesor, les recomiendo avanzar siempre en este orden:
+Les recomiendo avanzar siempre en este orden:
 
 1. Crear el modelo
 2. Definir sus relaciones
@@ -876,4 +876,4 @@ En otras palabras, no solo agregamos archivos: comenzamos a construir una arquit
 
 ## 15. Continuidad para la proxima clase
 
-En la clase del lunes que viene seguiremos con la integracion de estos elementos dentro de `Portal-Inmobiliario`, profundizando en relaciones, pruebas de endpoints, autenticacion y mejoras sobre la logica de negocio del portal.
+En la clase del jueves que viene seguiremos con la integracion de estos elementos dentro de `Portal-Inmobiliario`, profundizando en relaciones, pruebas de endpoints, autenticacion y mejoras sobre la logica de negocio del portal.
