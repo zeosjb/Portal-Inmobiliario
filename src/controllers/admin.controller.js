@@ -180,7 +180,8 @@ const deleteModerator = async(req = request, res = response) => {
 
 module.exports = {
     createModerator,
-    getModeator,
+    getModerator,
     getModerators,
+    updateModerator,
     deleteModerator
 }

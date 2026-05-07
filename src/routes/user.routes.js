@@ -10,7 +10,8 @@ const {
 
 const validateToken = require('../middlewares/validateToken');
 const verifyRole = require('../middlewares/verifyRole');
-const { createModerator, getModeator, getModerators, deleteModerator } = require('../controllers/admin.controller');
+const { createModerator, getModerator, getModerators, updateModerator, deleteModerator } = require('../controllers/admin.controller');
+const { login, register } = require('../controllers/auth.controller');
 
 const router = Router();
 
@@ -21,9 +22,14 @@ router.put('/:id', validateToken, updateUser);
 router.delete('/:id', validateToken, verifyRole('Admin'), deleteUser);
 
 // Moderators
-router.get('/moderator/:id', validateToken, getModeator, verifyRole('Admin'))
+router.get('/moderator/:id', validateToken, getModerator, verifyRole('Admin'))
 router.get('/moderators', validateToken, getModerators, verifyRole('Admin'))
 router.post('/moderator', validateToken, createModerator, verifyRole('Admin'))
+router.patch('/moderator', validateToken, updateModerator, verifyRole('Admin'))
 router.delete('/moderator/:id', validateToken, deleteModerator, verifyRole('Admin'))
+
+// Auth
+router.post('/login', login)
+router.post('/register', register)
 
 module.exports = router;
