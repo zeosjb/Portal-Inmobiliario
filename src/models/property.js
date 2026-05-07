@@ -24,7 +24,7 @@ const Property = sequelize.define('Property', {
         type: DataTypes.DECIMAL(14, 2),
         allowNull: true
     },
-    adress: {
+    address: {
         type: DataTypes.STRING,
         allowNull: false
     },

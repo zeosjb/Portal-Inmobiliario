@@ -66,7 +66,11 @@ const createModerator = async (req = request, res = response) => {
 
 const getModerators = async (req = request, res = response) => {
     try {
-        const moderators = await User.findAll();
+        const moderators = await User.findAll({
+            where: {
+                roleId: 2
+            }
+        });
 
         if (!moderators || moderators.length == 0){
             return res.status(404).json({
@@ -86,13 +90,13 @@ const getModerators = async (req = request, res = response) => {
     }
 }
 
-const getModeator = async(req = request, res = response) => {
+const getModerator = async(req = request, res = response) => {
     try {
         const { id } = req.params
-        
+
         const moderator = await User.findByPk(id)
-        
-        if(!moderator) {
+
+        if (!moderator) {
             return res.status(404).json({
                 message: "Moderator not found"
             })
@@ -106,6 +110,44 @@ const getModeator = async(req = request, res = response) => {
         console.error(err)
         res.status(500).json({
             message: "An error occurred while obtaining the Moderator"
+        })
+    }
+}
+
+const updateModerator = async(req = request, res = response) => {
+    try {
+        const { id } = req.params
+        const { name, lastName, email, rut, password, phone, address } = req.body
+
+        const moderator = await User.findByPk(id)
+
+        if (!moderator) {
+            return res.status(404).json({
+                message: "Moderator not found"
+            })
+        }
+
+        if (name?.trim()) moderator.name = name
+        if (lastName?.trim()) moderator.lastName = lastName
+        if (email?.trim()) moderator.email = email
+        if (rut?.trim()) moderator.rut = rut
+        if (password?.trim()) {
+            const salt = bcryptjs.genSaltSync(10);
+            moderator.password = bcryptjs.hashSync(password, salt)
+        }
+        if (phone?.trim()) moderator.phone = phone
+        if (address?.trim()) moderator.address = address
+
+        await moderator.save()
+
+        res.status(200).json({
+            data: moderator,
+            message: "Moderator updated successfully"
+        })
+    } catch (err) {
+        console.error(err)
+        res.status(500).json({
+            message: "An error occurred while updating the Moderator"
         })
     }
 }

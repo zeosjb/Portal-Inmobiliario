@@ -13,7 +13,8 @@ class Server {
         this.server = require('http').createServer(this.app);
 
         this.paths = {
-            users: '/api/users'
+            users: '/api/users',
+            admin: '/api/admin'
         };
 
         this.connectDB();
@@ -60,6 +61,7 @@ class Server {
 
     routes() {
         this.app.use(this.paths.users, require('./routes/user.routes'));
+        this.app.use(this.paths.admin, require('./routes/admin.routes'));
     }
 
     listen() {
